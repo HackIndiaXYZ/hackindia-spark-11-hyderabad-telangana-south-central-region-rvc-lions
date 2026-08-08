@@ -38,6 +38,41 @@ GESTURE_INSTRUCTIONS = {
         "title": "Head Tilt Right",
         "instruction": "Tilt your head to the right side.",
         "demoVideo": ""
+    },
+    GestureType.NOD_YES: {
+        "title": "Head Nod (Yes)",
+        "instruction": "Nod your head up and down to indicate Yes.",
+        "demoVideo": ""
+    },
+    GestureType.SHAKE_NO: {
+        "title": "Head Shake (No)",
+        "instruction": "Shake your head left and right to indicate No.",
+        "demoVideo": ""
+    },
+    GestureType.FINGER_ONE: {
+        "title": "One Finger Gesture",
+        "instruction": "Raise 1 index finger clearly in front of the camera.",
+        "demoVideo": ""
+    },
+    GestureType.FINGER_TWO: {
+        "title": "Two Fingers (Victory/Peace)",
+        "instruction": "Raise 2 fingers (Peace sign) in front of the camera.",
+        "demoVideo": ""
+    },
+    GestureType.FINGER_THREE: {
+        "title": "Three Fingers Gesture",
+        "instruction": "Hold up 3 fingers in front of the camera.",
+        "demoVideo": ""
+    },
+    GestureType.FINGER_FOUR: {
+        "title": "Four Fingers Gesture",
+        "instruction": "Hold up 4 fingers in front of the camera.",
+        "demoVideo": ""
+    },
+    GestureType.FINGER_FIVE: {
+        "title": "Open Hand (Five Fingers)",
+        "instruction": "Show your full open palm (5 fingers) to request assistance.",
+        "demoVideo": ""
     }
 }
 
@@ -147,13 +182,18 @@ def start_calibration(patient_id: UUID, db: Session = Depends(get_db), current_u
         GestureType.DOUBLE_BLINK,
         GestureType.MOUTH_OPEN,
         GestureType.HEAD_LEFT,
-        GestureType.HEAD_RIGHT
+        GestureType.HEAD_RIGHT,
+        GestureType.NOD_YES,
+        GestureType.SHAKE_NO,
+        GestureType.FINGER_ONE,
+        GestureType.FINGER_TWO,
+        GestureType.FINGER_FIVE,
     ]
     
     return {
         "patientName": patient.name,
         "gesturesToCalibrate": gestures,
-        "instructions": {g: GESTURE_INSTRUCTIONS[g] for g in gestures}
+        "instructions": {g: GESTURE_INSTRUCTIONS[g] for g in gestures if g in GESTURE_INSTRUCTIONS}
     }
 
 @router.post("/{patient_id}/sample")

@@ -11,9 +11,9 @@ import {
   Trash2,
   RefreshCw,
   UserPlus,
-  ChevronRight,
 } from "lucide-react";
 import { ConditionBadge } from "../../components/UI/Badge";
+import { FloatingCameraWindow } from "../../components/FloatingCamera/FloatingCameraWindow";
 
 // ── Patient row avatar ────────────────────────────────────────────────────────
 function PatientAvatar({ name }: { name: string }) {
@@ -62,6 +62,7 @@ export const PatientsPage: React.FC = () => {
   const [loading,  setLoading]  = useState(true);
   const [error,    setError]    = useState<string | null>(null);
   const [search,   setSearch]   = useState("");
+  const [activeCameraPatient, setActiveCameraPatient] = useState<Patient | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -252,14 +253,13 @@ export const PatientsPage: React.FC = () => {
                     {/* Actions */}
                     <td className="table-cell">
                       <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                        <Link
-                          to={`/patients/${p.id}/monitor`}
-                          target="_blank"
-                          title="Open live camera feed"
+                        <button
+                          onClick={() => setActiveCameraPatient(p)}
+                          title="Open live camera feed in-page"
                           className="btn-icon bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/40"
                         >
                           <Video size={13} />
-                        </Link>
+                        </button>
                         <Link
                           to={`/patients/${p.id}/calibration`}
                           title="Calibrate patient"
@@ -311,6 +311,14 @@ export const PatientsPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* ── Floating Bedside Camera Window ─────────────────────────────── */}
+      {activeCameraPatient && (
+        <FloatingCameraWindow
+          patient={activeCameraPatient}
+          onClose={() => setActiveCameraPatient(null)}
+        />
+      )}
     </div>
   );
 };

@@ -11,6 +11,13 @@ const GESTURE_LABELS: Record<GestureType, string> = {
   head_left: "Turn head left",
   head_right: "Turn head right",
   mouth_open: "Open mouth",
+  nod_yes: "Nod head (Yes)",
+  shake_no: "Shake head (No)",
+  finger_one: "1 Finger gesture",
+  finger_two: "2 Fingers (Peace/Victory)",
+  finger_three: "3 Fingers gesture",
+  finger_four: "4 Fingers gesture",
+  finger_five: "5 Fingers (Open Palm)",
 };
 
 const NEED_OPTIONS: { value: NeedType; label: string }[] = [
@@ -20,6 +27,9 @@ const NEED_OPTIONS: { value: NeedType; label: string }[] = [
   { value: "pain", label: "Pain" },
   { value: "washroom", label: "Washroom" },
   { value: "emergency", label: "Emergency" },
+  { value: "yes", label: "Yes (Affirmative)" },
+  { value: "no", label: "No (Negative)" },
+  { value: "other", label: "Other Need" },
 ];
 
 export const PatientSetupPage: React.FC = () => {

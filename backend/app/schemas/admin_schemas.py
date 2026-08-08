@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 from uuid import UUID
 from datetime import datetime
 
@@ -59,6 +59,8 @@ class HospitalResponse(BaseModel):
 # ─── Camera Schemas ───────────────────────────────────────────────────────────
 
 class CameraCreate(BaseModel):
+    name: Optional[str] = None
+    camera_code: Optional[str] = None
     hospital_id: str
     ward: str
     bed_number: str
@@ -68,6 +70,8 @@ class CameraCreate(BaseModel):
 
 
 class CameraUpdate(BaseModel):
+    name: Optional[str] = None
+    camera_code: Optional[str] = None
     hospital_id: Optional[str] = None
     ward: Optional[str] = None
     bed_number: Optional[str] = None
@@ -83,6 +87,8 @@ class CameraUpdate(BaseModel):
 
 class CameraResponse(BaseModel):
     id: UUID
+    name: Optional[str] = None
+    camera_code: Optional[str] = None
     hospital_id: str
     ward: str
     bed_number: str
@@ -223,12 +229,12 @@ class DashboardStats(BaseModel):
 
 class TimeSeriesPoint(BaseModel):
     label: str
-    value: int
+    value: Union[int, float]
 
 
 class DistributionPoint(BaseModel):
     name: str
-    value: int
+    value: Union[int, float]
     color: Optional[str] = None
 
 

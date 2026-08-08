@@ -9,7 +9,6 @@ import {
   User,
   Building2,
   Camera,
-  Heart,
 } from "lucide-react";
 
 const CONDITIONS = [

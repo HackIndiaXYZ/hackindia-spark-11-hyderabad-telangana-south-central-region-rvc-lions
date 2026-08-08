@@ -9,11 +9,23 @@ const NEED_CONFIG: Record<NeedType, { label: string; className: string; dot: str
   pain:      { label: "Pain",      className: "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800",              dot: "bg-rose-500"   },
   washroom:  { label: "Washroom",  className: "bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 border border-teal-200 dark:border-teal-800",              dot: "bg-teal-500"   },
   emergency: { label: "Emergency", className: "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border border-red-300 dark:border-red-700 font-bold",         dot: "bg-red-500 animate-pulse" },
+  yes:       { label: "Yes",       className: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800", dot: "bg-emerald-500" },
+  no:        { label: "No",        className: "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800",                dot: "bg-rose-500"    },
+  other:     { label: "Other",     className: "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800",                dot: "bg-blue-500"    },
+  medicine:  { label: "Medicine",  className: "bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-800",        dot: "bg-purple-500 font-bold" },
+  ok:        { label: "Patient OK", className: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800", dot: "bg-emerald-500" },
+  assistance: { label: "Assistance", className: "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800",        dot: "bg-amber-500"  },
+  attention: { label: "Attention", className: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800",        dot: "bg-indigo-500" },
 };
 
-interface NeedBadgeProps { need: NeedType; size?: "sm" | "md"; }
+interface NeedBadgeProps { need: NeedType | string; size?: "sm" | "md"; }
 export const NeedBadge: React.FC<NeedBadgeProps> = ({ need, size = "md" }) => {
-  const cfg = NEED_CONFIG[need] ?? NEED_CONFIG.nurse;
+  const key = String(need || "").toLowerCase().trim() as NeedType;
+  const cfg = NEED_CONFIG[key] ?? NEED_CONFIG.other ?? {
+    label: need ? String(need).replace(/_/g, " ") : "Need",
+    className: "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800",
+    dot: "bg-blue-500",
+  };
   return (
     <span className={`badge ${cfg.className} ${size === "sm" ? "text-[11px] px-2 py-0.5" : "text-xs px-2.5 py-1"}`}>
       <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${cfg.dot}`} />

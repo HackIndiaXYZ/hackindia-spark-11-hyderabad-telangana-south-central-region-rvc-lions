@@ -45,6 +45,8 @@ export interface HospitalCreate {
 // ─── Camera ──────────────────────────────────────────────────────────────────
 export interface Camera {
   id: string;
+  name?: string;
+  camera_code?: string;
   hospital_id: string;
   ward: string;
   bed_number: string;
@@ -62,6 +64,8 @@ export interface Camera {
 }
 
 export interface CameraCreate {
+  name?: string;
+  camera_code?: string;
   hospital_id: string;
   ward: string;
   bed_number: string;

@@ -7,6 +7,7 @@ import { CalibrationPage } from "./pages/Calibration/CalibrationPage";
 import { PatientSetupPage } from "./pages/PatientSetup/PatientSetupPage";
 import { LoginPage } from "./pages/Login/LoginPage";
 import { BedsidePage } from "./pages/Bedside/BedsidePage";
+import { PhoneCameraPage } from "./pages/PhoneCamera/PhoneCameraPage";
 import { PatientsPage } from "./pages/Patients/PatientsPage";
 import { AddPatientPage } from "./pages/AddPatient/AddPatientPage";
 import { DetectionsPage } from "./pages/Detections/DetectionsPage";
@@ -15,6 +16,7 @@ import { AnalyticsPage } from "./pages/Analytics/AnalyticsPage";
 import { SettingsPage } from "./pages/Settings/SettingsPage";
 import { MonitoringPage } from "./pages/Monitoring/MonitoringPage";
 import { AppShell } from "./components/Layout/AppShell";
+import { ErrorBoundary } from "./components/UI/ErrorBoundary";
 import { authApi } from "./services/api";
 
 // ── Admin module ─────────────────────────────────────────────────────────────
@@ -77,9 +79,10 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-    >
+    <ErrorBoundary>
+      <BrowserRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
       <Routes>
         {/* Public */}
         <Route path="/login" element={<LoginPage />} />
@@ -131,9 +134,12 @@ function App() {
           </RequireAuth>
         } />
 
-        {/* Bedside (no shell) */}
+        {/* Bedside & Camera (no shell) */}
         <Route path="/patients/:patientId/monitor" element={
           <RequireAuth><BedsidePage /></RequireAuth>
+        } />
+        <Route path="/patients/:patientId/phone-camera" element={
+          <RequireAuth><PhoneCameraPage /></RequireAuth>
         } />
         <Route path="/patients/:patientId/calibration" element={
           <RequireAuth><CalibrationPage /></RequireAuth>
@@ -208,6 +214,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
+  </ErrorBoundary>
   );
 }
 

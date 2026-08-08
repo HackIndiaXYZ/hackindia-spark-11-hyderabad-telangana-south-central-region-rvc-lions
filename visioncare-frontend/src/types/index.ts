@@ -4,7 +4,14 @@ export type NeedType =
   | "nurse"
   | "pain"
   | "washroom"
-  | "emergency";
+  | "emergency"
+  | "yes"
+  | "no"
+  | "medicine"
+  | "ok"
+  | "assistance"
+  | "attention"
+  | "other";
 
 export type GestureType =
   | "double_blink"
@@ -13,7 +20,14 @@ export type GestureType =
   | "eyebrow_raise"
   | "head_left"
   | "head_right"
-  | "mouth_open";
+  | "mouth_open"
+  | "nod_yes"
+  | "shake_no"
+  | "finger_one"
+  | "finger_two"
+  | "finger_three"
+  | "finger_four"
+  | "finger_five";
 
 export type RequestStatus =
   | "pending"
@@ -45,8 +59,10 @@ export interface Patient {
   notes?: string;
   isActive?: boolean;
   is_active?: boolean;
-  createdAt?: string;
-  created_at?: string;
+  can_use_hand_gestures?: boolean;
+  calibrated_hand_gestures?: string[];
+  calibration_date?: string;
+  cameraId?: string;
 }
 
 export interface PatientRequest {
@@ -54,9 +70,11 @@ export interface PatientRequest {
   patientId: string;
   patientName: string;
   bedNumber: string;
+  cameraId?: string;
   need: NeedType;
   gestureType?: GestureType;
   confidence: number;
+  priority?: "critical" | "high" | "medium" | "low";
   timestamp: Date;
   status: RequestStatus;
   acknowledgedBy?: string;

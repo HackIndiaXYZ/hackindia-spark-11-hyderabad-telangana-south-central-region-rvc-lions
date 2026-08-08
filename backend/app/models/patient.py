@@ -41,8 +41,12 @@ class Patient(Base, TimestampMixin):
     face_embedding = Column(JSON, nullable=True, default=None)
     # True once face_embedding has been successfully captured
     face_calibrated = Column(Boolean, default=False)
-    # Per-patient similarity threshold (overrides the global default of 0.75)
     face_similarity_threshold = Column(JSON, nullable=True, default=None)
-    
+    # ── Hand Gesture Capabilities ──────────────────────────────────────
+    can_use_hand_gestures = Column(Boolean, default=True)
+    calibrated_hand_gestures = Column(JSON, default=list)
+    hand_gesture_confidence = Column(JSON, default=dict)
+    calibration_date = Column(String(50), nullable=True)
+
     def __repr__(self):
         return f"<Patient {self.name} - Bed {self.bed_number}>"

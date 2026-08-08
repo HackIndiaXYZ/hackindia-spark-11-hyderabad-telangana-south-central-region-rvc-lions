@@ -20,8 +20,10 @@ class Detection(Base, TimestampMixin):
     
     id = Column(Uuid, primary_key=True, default=uuid.uuid4)
     patient_id = Column(Uuid, ForeignKey("patients.id"), nullable=False)
-    gesture_type = Column(Enum(GestureType), nullable=False)
-    need_type = Column(Enum(NeedType), nullable=False)
+    # Store as String to support both facial (GestureType enum values) and
+    # hand gesture types (open_palm, thumbs_up, etc.) without enum validation errors.
+    gesture_type = Column(String(50), nullable=False)
+    need_type = Column(String(50), nullable=False)
     confidence = Column(Float, nullable=False)
     status = Column(Enum(RequestStatus), default=RequestStatus.PENDING)
     

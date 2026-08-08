@@ -1,10 +1,13 @@
 import axios, { AxiosInstance } from "axios";
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_URL ?? "http://127.0.0.1:8000";
+const getApiBaseUrl = () => {
+  if (process.env.REACT_APP_API_URL) return process.env.REACT_APP_API_URL;
+  const host = typeof window !== "undefined" && window.location.hostname ? window.location.hostname : "127.0.0.1";
+  return `http://${host}:8000`;
+};
 
 export const api: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getApiBaseUrl(),
   timeout: 30000, // 30 second timeout for cold starts
   headers: {
     "Content-Type": "application/json",
@@ -85,6 +88,11 @@ export const calibrationApi = {
     }),
   getFaceStatus: (patientId: string) =>
     api.get(`/api/calibration/${patientId}/face/status`),
+  saveHandCalibration: (patientId: string, gestures: string[]) =>
+    api.patch(`/api/patients/${patientId}`, {
+      calibrated_hand_gestures: gestures,
+      calibration_date: new Date().toISOString(),
+    }),
 };
 
 // ---- Detections / Requests ----

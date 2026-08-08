@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PatientRequest, RequestStatus } from "../../types";
-import { NEED_CONFIG, getTimeAgo } from "../../utils/needConfig";
+import { NEED_CONFIG, getNeedConfig, getTimeAgo } from "../../utils/needConfig";
 import { NeedBadge } from "../NeedBadge/NeedBadge";
 
 interface PatientCardProps {
@@ -15,7 +15,7 @@ export const PatientCard: React.FC<PatientCardProps> = ({
   urgent = false,
 }) => {
   const [, forceTick] = useState(0);
-  const config = NEED_CONFIG[request.need];
+  const config = getNeedConfig(request.need);
 
   // Re-render every 15s so "time ago" stays fresh without a global timer.
   useEffect(() => {
@@ -53,18 +53,16 @@ export const PatientCard: React.FC<PatientCardProps> = ({
 
       <div className="flex gap-2">
         <button
-          onClick={() => onAcknowledge(request.id, "acknowledged")}
-          className="flex-1 py-2 px-4 bg-signal-teal text-white rounded-lg font-medium
-                     hover:bg-signal-teal/90 transition-colors"
+          onClick={() => onAcknowledge(request.id, "completed")}
+          className="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold text-xs transition-colors flex items-center justify-center gap-1"
         >
-          Acknowledge
+          ✓ Mark Served
         </button>
         <button
-          onClick={() => onAcknowledge(request.id, "completed")}
-          className="flex-1 py-2 px-4 bg-ink-900 text-white rounded-lg font-medium
-                     hover:bg-ink-800 transition-colors"
+          onClick={() => onAcknowledge(request.id, "acknowledged")}
+          className="flex-1 py-2 px-3 bg-signal-teal text-white rounded-lg font-semibold text-xs hover:bg-signal-teal/90 transition-colors"
         >
-          Complete
+          Acknowledge
         </button>
         <button
           onClick={() => onAcknowledge(request.id, "false_positive")}

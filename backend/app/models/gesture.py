@@ -13,6 +13,22 @@ class GestureType(str, enum.Enum):
     HEAD_LEFT = "head_left"
     HEAD_RIGHT = "head_right"
     MOUTH_OPEN = "mouth_open"
+    NOD_YES = "nod_yes"
+    SHAKE_NO = "shake_no"
+    FINGER_ONE = "finger_one"
+    FINGER_TWO = "finger_two"
+    FINGER_THREE = "finger_three"
+    FINGER_FOUR = "finger_four"
+    FINGER_FIVE = "finger_five"
+    # ── Hand gesture types ──────────────────────────────────────────────
+    OPEN_PALM = "open_palm"
+    THUMBS_UP = "thumbs_up"
+    THUMBS_DOWN = "thumbs_down"
+    CLOSED_FIST = "closed_fist"
+    WAVE = "wave"
+    INDEX_FINGER = "index_finger"
+    TWO_FINGERS = "two_fingers"
+    THREE_FINGERS = "three_fingers"
 
 class NeedType(str, enum.Enum):
     WATER = "water"
@@ -21,6 +37,9 @@ class NeedType(str, enum.Enum):
     PAIN = "pain"
     WASHROOM = "washroom"
     EMERGENCY = "emergency"
+    YES = "yes"
+    NO = "no"
+    OTHER = "other"
 
 class GestureMapping(Base, TimestampMixin):
     __tablename__ = "gesture_mappings"

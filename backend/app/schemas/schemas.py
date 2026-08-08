@@ -40,6 +40,8 @@ class PatientCreate(BaseModel):
     condition: PatientCondition
     notes: Optional[str] = None
     thresholds: Optional[Dict[str, Any]] = Field(default_factory=dict)
+    can_use_hand_gestures: Optional[bool] = True
+    calibrated_hand_gestures: Optional[List[str]] = Field(default_factory=list)
 
 class PatientUpdate(BaseModel):
     name: Optional[str] = None
@@ -49,6 +51,9 @@ class PatientUpdate(BaseModel):
     condition: Optional[PatientCondition] = None
     notes: Optional[str] = None
     thresholds: Optional[Dict[str, Any]] = None
+    can_use_hand_gestures: Optional[bool] = None
+    calibrated_hand_gestures: Optional[List[str]] = None
+    calibration_date: Optional[str] = None
 
 class PatientResponse(BaseModel):
     id: UUID
@@ -61,6 +66,10 @@ class PatientResponse(BaseModel):
     notes: Optional[str] = None
     is_active: bool
     thresholds: Dict[str, Any]
+    can_use_hand_gestures: Optional[bool] = True
+    calibrated_hand_gestures: Optional[List[str]] = Field(default_factory=list)
+    hand_gesture_confidence: Optional[Dict[str, Any]] = Field(default_factory=dict)
+    calibration_date: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
@@ -101,8 +110,9 @@ class CalibrationSampleCreate(BaseModel):
 class DetectionResponse(BaseModel):
     id: UUID
     patient_id: UUID
-    gesture_type: GestureType
-    need_type: NeedType
+    # Use str to support both facial gesture enum values and hand gesture strings
+    gesture_type: str
+    need_type: str
     confidence: float
     status: RequestStatus
     acknowledged_by: Optional[str] = None

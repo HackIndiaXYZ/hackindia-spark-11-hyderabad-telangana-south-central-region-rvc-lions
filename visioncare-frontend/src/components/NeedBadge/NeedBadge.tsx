@@ -1,14 +1,14 @@
 import React from "react";
 import { NeedType } from "../../types";
-import { NEED_CONFIG } from "../../utils/needConfig";
+import { getNeedConfig } from "../../utils/needConfig";
 
 interface NeedBadgeProps {
-  need: NeedType;
+  need: NeedType | string;
   size?: "sm" | "md";
 }
 
 export const NeedBadge: React.FC<NeedBadgeProps> = ({ need, size = "md" }) => {
-  const config = NEED_CONFIG[need];
+  const config = getNeedConfig(need);
   const sizeClass = size === "sm" ? "text-xs px-2 py-0.5" : "text-sm px-2.5 py-1";
 
   return (

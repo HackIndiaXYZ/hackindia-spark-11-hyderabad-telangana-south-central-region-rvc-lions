@@ -173,10 +173,11 @@ export const CamerasPage: React.FC = () => {
         </>}
       >
         <div className="space-y-4">
-          {(['hospital_id','ward','bed_number','ip_address','patient_id','patient_name'] as const).map((k) => (
+          {(['name','camera_code','hospital_id','ward','bed_number','ip_address','patient_id','patient_name'] as const).map((k) => (
             <div key={k}>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1.5">{k.replace(/_/g,' ')}</label>
               <input value={form[k] ?? ''} onChange={(e) => f(k, e.target.value)}
+                placeholder={k === 'name' ? 'e.g. Bedside Camera 1' : k === 'camera_code' ? 'e.g. CAM-101' : ''}
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500/50" />
             </div>
           ))}

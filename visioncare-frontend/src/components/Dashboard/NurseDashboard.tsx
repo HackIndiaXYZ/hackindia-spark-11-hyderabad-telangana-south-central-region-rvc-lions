@@ -269,16 +269,16 @@ export const NurseDashboard: React.FC<NurseDashboardProps> = ({
     ? patients
     : MOCK_PATIENTS.filter((p) => p.wardId === wardId || patients.length === 0);
 
-  const loadPatients = async () => {
+  const loadPatients = useCallback(async () => {
     try {
       const res = await patientsApi.list(wardId);
       setPatients(res.data || []);
     } catch {
       setPatients([]);
     }
-  };
+  }, [wardId]);
 
-  useEffect(() => { loadPatients(); }, [wardId]);
+  useEffect(() => { loadPatients(); }, [loadPatients]);
 
   const handleAddPatient = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -589,18 +589,31 @@ export const NurseDashboard: React.FC<NurseDashboardProps> = ({
                     {alert.message}
                   </div>
                 )}
-                <div className="ml-auto flex gap-2">
+                <div className="ml-auto flex flex-wrap gap-2">
                   <Link
                     to={`/patients/${p.id}/monitor`}
                     target="_blank"
-                    className="btn-teal text-xs"
+                    className="btn-teal text-xs flex items-center gap-1"
                   >
                     <ExternalLink size={13} />
-                    Full Feed
+                    Live Feed
+                  </Link>
+                  <Link
+                    to={`/patients/${p.id}/phone-camera`}
+                    target="_blank"
+                    className="btn-secondary text-xs flex items-center gap-1"
+                  >
+                    📱 Mobile Cam
+                  </Link>
+                  <Link
+                    to={`/patients/${p.id}/calibration`}
+                    className="btn-secondary text-xs flex items-center gap-1"
+                  >
+                    🎯 Calibrate
                   </Link>
                   <button
                     onClick={() => handleDischargePatient(p.id)}
-                    className="btn-danger text-xs"
+                    className="btn-danger text-xs flex items-center gap-1"
                   >
                     <UserMinus size={13} />
                     Discharge

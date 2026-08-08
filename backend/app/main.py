@@ -14,7 +14,7 @@ from .models.audit_log import AuditLog
 from .core.security import get_password_hash
 
 # Import existing routers
-from .api.routes import auth, patient, gesture_mappings, calibration, detections, websocket
+from .api.routes import auth, patient, gesture_mappings, calibration, detections, websocket, droidcam
 
 # Import admin routers
 from .api.routes import (
@@ -51,15 +51,22 @@ def _init_db():
         inspector = inspect(engine)
         existing_tables = inspector.get_table_names()
 
-        # ── patients: face recognition columns ───────────────────────────────
+        # ── patients: face & hand gesture columns ────────────────────────────
         if "patients" in existing_tables:
             columns = [c["name"] for c in inspector.get_columns("patients")]
-            if "face_embedding" not in columns:
-                logger.info("Migrating patients table (adding face columns)...")
-                with engine.begin() as conn:
+            with engine.begin() as conn:
+                if "face_embedding" not in columns:
                     _migrate_column(conn, text, "patients", "face_embedding", "JSON DEFAULT NULL")
                     _migrate_column(conn, text, "patients", "face_calibrated", "BOOLEAN DEFAULT 0")
                     _migrate_column(conn, text, "patients", "face_similarity_threshold", "JSON DEFAULT NULL")
+                if "can_use_hand_gestures" not in columns:
+                    _migrate_column(conn, text, "patients", "can_use_hand_gestures", "BOOLEAN DEFAULT 1")
+                if "calibrated_hand_gestures" not in columns:
+                    _migrate_column(conn, text, "patients", "calibrated_hand_gestures", "JSON DEFAULT NULL")
+                if "hand_gesture_confidence" not in columns:
+                    _migrate_column(conn, text, "patients", "hand_gesture_confidence", "JSON DEFAULT NULL")
+                if "calibration_date" not in columns:
+                    _migrate_column(conn, text, "patients", "calibration_date", "VARCHAR(50) DEFAULT NULL")
 
         # ── users: admin columns added later ─────────────────────────────────
         if "users" in existing_tables:
@@ -71,6 +78,15 @@ def _init_db():
                     _migrate_column(conn, text, "users", "phone", "VARCHAR(50) DEFAULT NULL")
                 if "role" not in user_cols:
                     _migrate_column(conn, text, "users", "role", "VARCHAR(50) DEFAULT 'nurse'")
+
+        # ── cameras: name & camera_code columns ─────────────────────────────
+        if "cameras" in existing_tables:
+            cam_cols = [c["name"] for c in inspector.get_columns("cameras")]
+            with engine.begin() as conn:
+                if "name" not in cam_cols:
+                    _migrate_column(conn, text, "cameras", "name", "VARCHAR(255) DEFAULT NULL")
+                if "camera_code" not in cam_cols:
+                    _migrate_column(conn, text, "cameras", "camera_code", "VARCHAR(50) DEFAULT NULL")
 
         # ── Create all new tables (hospitals, cameras, admin_alerts, etc.) ───
         Base.metadata.create_all(bind=engine)
@@ -149,6 +165,7 @@ app.include_router(gesture_mappings.router, prefix="/api/gesture-mappings", tags
 app.include_router(calibration.router, prefix="/api/calibration", tags=["calibration"])
 app.include_router(detections.router, prefix="/api/detections", tags=["detections"])
 app.include_router(websocket.router, tags=["websockets"])
+app.include_router(droidcam.router, prefix="/api/droidcam", tags=["droidcam"])
 
 # ── Admin routes ──────────────────────────────────────────────────────────────
 app.include_router(admin_hospitals.router,     prefix="/api/admin/hospitals",     tags=["admin-hospitals"])
